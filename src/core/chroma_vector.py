@@ -1,6 +1,6 @@
 import os
 from langchain_chroma import Chroma
-from core.model_loader import ModelLoader
+from src.core.model_loader import ModelLoader
 
 class SymChromaStoreManager:
     def __init__(self, chroma_path=""):

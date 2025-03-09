@@ -1,6 +1,6 @@
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from data_prepare.documents_loader import SymTextLoader
+from src.data_prepare.documents_loader import SymTextLoader
 
 class SymTextSplitter:
     @staticmethod

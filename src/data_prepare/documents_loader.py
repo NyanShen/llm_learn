@@ -13,7 +13,7 @@ from langchain_community.document_loaders import (
     UnstructuredHTMLLoader,
 )
 
-from utils.data_standard import format_tables
+from src.utils.data_standard import format_tables
 
 class SymTextLoader:
     def __init__(self, file_path):
