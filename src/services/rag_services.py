@@ -10,6 +10,7 @@ from langchain_core.output_parsers import StrOutputParser
 from src.core.model_loader import ModelLoader
 from src.data_prepare.documents_splitter import SymTextSplitter
 from src.core.chroma_vector import SymChromaStoreManager
+from src.utils.zyyy_chunks import load_all_csv_data
 
 class RagServices:
     def __init__(self):
@@ -26,7 +27,28 @@ class RagServices:
         docs = vector_store.similarity_search_with_score("简述高质量发展")
         for doc in docs:
             print("doc list item:", doc) # 打印出检索到的结果
+    @staticmethod
+    def build_zyyy_vector_store(file_folder, collection_name):
+        split_docs = load_all_csv_data(file_folder)
+        vector_store = SymChromaStoreManager().create_vector_store(split_docs, collection_name)
+        docs = vector_store.similarity_search_with_score("国医堂科室位置")
+        for doc in docs:
+            print("doc list item:", doc) # 打印出检索到的结果
 
+    @staticmethod
+    def zyyy_adaptive_retrieval(query, top_k=5):
+        '''
+        弹性检索策略
+        '''
+        vector_db = SymChromaStoreManager().load_vector_store("zyyy")
+        # 第一阶段：基础语义搜索
+        base_results = vector_db.as_retriever(
+            search_type="mmr",
+            search_kwargs={'k': top_k, 'lambda_mult': 0.25}
+        )
+        print("base_results:", query)
+        
+        return base_results
     @traceable
     def build_qa_system(self, question):
         '''

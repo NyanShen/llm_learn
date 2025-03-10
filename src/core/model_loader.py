@@ -53,6 +53,7 @@ class ModelLoader:
         # 加载分词器和模型
         model_path = os.environ['MODEL_LOCAL_PATH']
         tokenizer = AutoTokenizer.from_pretrained(model_path)
+        model = AutoModelForCausalLM.from_pretrained(model_path)
 
         # 创建推理管道
         pipe = pipeline(
@@ -68,7 +69,7 @@ class ModelLoader:
         # 创建LangChain的LLM实例
         local_chat_model = HuggingFacePipeline(pipeline=pipe)
 
-        print("加载本地chatllm模型完成")
+        print("加载本地chatllm模型完成", local_chat_model)
         return local_chat_model
     
     @staticmethod

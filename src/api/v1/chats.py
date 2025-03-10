@@ -12,5 +12,5 @@ async def retriever_chat(question):
 @router.get("/ask")
 async def ask(question):
     print("请求开始调用.......")
-    response = RagServices().build_qa_system(question)
+    response = RagServices().zyyy_adaptive_retrieval(question)
     return {"results": response}
