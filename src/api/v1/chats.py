@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from src.core.model_loader import ModelLoader
 from src.services.rag_services import RagServices
 
 router = APIRouter(prefix="/chats", tags=["chats"])
@@ -12,5 +11,5 @@ async def retriever_chat(question):
 @router.get("/ask")
 async def ask(question):
     print("请求开始调用.......")
-    response = RagServices().zyyy_adaptive_retrieval(question)
+    response = RagServices().build_qa_system(question, "mba_db")
     return {"results": response}

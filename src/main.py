@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 # rag services
 from src.services.rag_services import RagServices
 # model loader
-from src.core.model_loader import ModelLoader
+from src.services.model_loader_services import SymModelLoaderServices
 from src.utils.zyyy_chunks import load_all_csv_data
 # fast api
 from fastapi import FastAPI
@@ -28,9 +28,11 @@ def create_app():
 
 
 def prepare_models():
-    ModelLoader().load_hf_embedding_model()
-    ModelLoader().load_openai_chat_model()
-    # ModelLoader().load_local_chat_model()
+    # SymModelLoaderServices().load_hf_embedding_model()
+    # SymModelLoaderServices().load_openai_chat_model()
+    # SymModelLoaderServices().load_local_chat_model()
+    SymModelLoaderServices().load_ollama_embedding_model()
+    SymModelLoaderServices().load_ollama_llm_model()
     print("models prepare")
 
 # 1.创建服务实例
@@ -38,11 +40,18 @@ app = create_app()
 # 2.加载环境变量
 load_dotenv()
 # 3.模型加载
-# prepare_models()
+prepare_models()
 
 if __name__ == "__main__":
-    # RagServices().build_qa_system("简述高质量发展")
+    
     # main()
     # RagServices().build_zyyy_vector_store("data/excels", "zyyy")
     # RagServices().zyyy_adaptive_retrieval("耳鼻喉科科室电话")
-    print("Hello World!", load_all_csv_data("data/excels"))
+    # 1.离线构建向量数据库步骤
+    # RagServices().build_common_vector_store(
+    #     collection_name="mba_db",
+    #     overwrite=True
+    # )
+    # 2.在线检索向量数据库
+    response = RagServices().build_qa_system(question="简述全过程人民民主",collection_name="mba_db")
+    print("Hello World!", response)

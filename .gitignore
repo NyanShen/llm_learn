@@ -1,4 +1,5 @@
 .env
 data/
+documents/*
 models/
 vector_store/
