@@ -37,12 +37,12 @@ class RagServices:
         # 加载本地向量数据库检索器.
         retriever = SymChromaVectorServices(collection_name).create_retriever()
         # 检索器检索之后的结果.
-        retriever_result = retriever.invoke(question)
+        # retriever_result = retriever.invoke(question)
         # 遍历检索结果中的每个文档，提取其内容，并用换行符连接成一个完整的上下文字符串
-        context = "\n".join([doc.page_content for doc in retriever_result])
+        # context = "\n".join([doc.page_content for doc in retriever_result])
 
         # 打印检索结果
-        print("检索结果:", context)
+        # print("检索结果:", context)
 
         # 构建提示语.
         # ChatPromptTemplate 是一个模板类，用于生成聊天提示语
@@ -52,13 +52,12 @@ class RagServices:
         chat_model = SymModelLoaderServices().load_ollama_llm_model()
         
         # 创建处理链
-        # RunnableParallel 是一个并行执行类，用于同时处理多个输入
-        # RunnablePassthrough 是一个传递类，用于直接传递输入
-        # retriever | (lambda docs: context) 表示先通过检索器获取结果，然后通过 lambda 函数将结果转换为上下文
+        # RunnableParallel 是一个并行执行类，用于同时处理多个输入 RunnablePassthrough 是一个传递类，用于直接传递输入
+        # retriever | (lambda docs: "\n".join([doc.page_content for doc in docs]) 表示先通过检索器获取结果，然后通过 lambda 函数将结果转换为上下文
         chain = (
             RunnableParallel(
                 question=RunnablePassthrough(),
-                context=retriever | (lambda docs: context)
+                context=retriever | (lambda docs: "\n".join([doc.page_content for doc in docs]))
             )
             | prompt_template
             | chat_model
