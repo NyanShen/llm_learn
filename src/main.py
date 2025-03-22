@@ -31,9 +31,11 @@ def prepare_models():
     # SymModelLoaderServices().load_hf_embedding_model()
     # SymModelLoaderServices().load_openai_chat_model()
     # SymModelLoaderServices().load_local_chat_model()
-    SymModelLoaderServices().load_ollama_embedding_model()
-    SymModelLoaderServices().load_ollama_llm_model()
-    print("models prepare")
+    model_loader = SymModelLoaderServices()
+    model_loader.load_ollama_embedding_model()
+    model_loader.load_ollama_llm_model()
+    model_loader.load_ollama_chat_model()
+    print("models prepared...")
 
 # 1.创建服务实例
 app = create_app()
@@ -53,5 +55,7 @@ if __name__ == "__main__":
     #     overwrite=True
     # )
     # 2.在线检索向量数据库
-    response = RagServices().build_qa_system(question="简述全过程人民民主",collection_name="mba_db")
-    print("Hello World!", response)
+    # response = RagServices().build_qa_system(question="简述全过程人民民主",collection_name="mba_db")
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+    print("Hello World!")

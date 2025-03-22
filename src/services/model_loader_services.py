@@ -2,7 +2,7 @@
 import os
 import functools
 import threading
-from langchain_ollama import OllamaLLM, OllamaEmbeddings
+from langchain_ollama import OllamaLLM, OllamaEmbeddings, ChatOllama
 from langchain_openai import ChatOpenAI 
 from langchain_huggingface import HuggingFaceEmbeddings, HuggingFacePipeline
 from sentence_transformers import SentenceTransformer # 加载和使用Embedding模型
@@ -34,12 +34,14 @@ class SymModelLoaderServices:
         load_dotenv()
 
     @staticmethod
+    @cached_model("load_ollama_llm_model")
     def load_ollama_llm_model():
         """
-        加载ollama模型
+        加载ollama llm模型
         """
         # 初始化模型
         print(f"加载ollma llm模型......")
+        # 创建OllamaLLM对象，用于加载ollama语言模型
         llm = OllamaLLM(
             base_url=os.environ['OLLAMA_BASE_URL'],  # 可配置为内部服务器地址
             model=os.environ['OLLAMA_LLM_MODEL_NAME'],
@@ -50,9 +52,10 @@ class SymModelLoaderServices:
         return llm
     
     @staticmethod
+    @cached_model("load_ollama_embedding_model")
     def load_ollama_embedding_model():
         """
-        加载ollama模型
+        加载ollama embedding模型
         bge-m3:567m
         """
         # 初始化模型
@@ -64,6 +67,24 @@ class SymModelLoaderServices:
             num_ctx=4096  # 上下文窗口大小
         )
         print(f"加载ollma embedding模型完成")
+        return llm
+    @staticmethod
+    @cached_model("load_ollama_chat_model")
+    def load_ollama_chat_model():
+        """
+        加载ollama chat模型
+        """
+        # 初始化模型
+        print(f"加载ollma chat模型......")
+        # 创建ChatOllama对象，用于与ollama chat模型进行交互
+        # 创建ChatOllama实例，用于与ollama chat模型进行交互
+        llm = ChatOllama(
+            base_url=os.environ['OLLAMA_BASE_URL'],  # 可配置为内部服务器地址
+            model=os.environ['OLLAMA_CHAT_MODEL_NAME'],
+            temperature=0.8,
+            num_ctx=4096  # 上下文窗口大小
+        )
+        print(f"加载ollma chat模型完成")
         return llm
 
     @staticmethod
