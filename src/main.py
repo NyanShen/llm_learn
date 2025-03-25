@@ -10,7 +10,8 @@ from src.utils.zyyy_chunks import load_all_csv_data
 # fast api
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.api.v1 import chats, tests
+from src.api.v1 import chats, tests, calls
+from src.ws.v1 import chats as ws_chats
 
 def create_app():
     app = FastAPI(title="SymLLM")
@@ -24,6 +25,10 @@ def create_app():
     # register router
     app.include_router(tests.router, prefix="/api/v1")# 明确版本隔离
     app.include_router(chats.router, prefix="/api/v1")# 明确版本隔离
+    app.include_router(calls.router, prefix="/api/v1")# 明确版本隔离
+
+    # web socket
+    app.include_router(ws_chats.router, prefix="/ws/v1")
     return app
 
 
