@@ -75,6 +75,7 @@ async def chat_stream(request: ChatRequest):
     llm = ChatOllama(
         base_url=os.environ['OLLAMA_BASE_URL'],  # 可配置为内部服务器地址
         model=os.environ['OLLAMA_LLM_MODEL_NAME']
+        
     )
     
     async def generate():
